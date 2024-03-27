@@ -1,5 +1,6 @@
 "use client";
 
+import { currencies } from "@/config/currency";
 import { RequestNetwork, Types } from "@requestnetwork/request-client.js";
 import { useEffect, useState } from "react";
 import { formatUnits } from "viem";
@@ -66,9 +67,26 @@ export default function Home() {
                 {request?.payer?.value.slice(0, 5)}...
                 {request?.payer?.value.slice(39, 42)}
               </td>
-              <td>{request?.currency}</td>
               <td>
-                {formatUnits(BigInt(request?.expectedAmount as number), 18)}
+                {
+                  currencies.get(
+                    request!.currencyInfo.network!.concat(
+                      "_",
+                      request!.currencyInfo.value,
+                    ),
+                  )?.symbol
+                }
+              </td>
+              <td>
+                {formatUnits(
+                  BigInt(request?.expectedAmount as number),
+                  currencies.get(
+                    request!.currencyInfo.network!.concat(
+                      "_",
+                      request!.currencyInfo.value,
+                    ),
+                  )?.decimals || 18,
+                )}
               </td>
               <td>{request?.contentData.reason}</td>
               <td>{request?.contentData.dueDate}</td>
