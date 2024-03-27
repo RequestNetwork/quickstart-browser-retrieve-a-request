@@ -68,24 +68,18 @@ export default function Home() {
                 {request?.payer?.value.slice(39, 42)}
               </td>
               <td>
-                {
-                  currencies.get(
-                    request!.currencyInfo.network!.concat(
-                      "_",
-                      request!.currencyInfo.value,
-                    ),
-                  )?.symbol
-                }
+                {getSymbol(
+                  request!.currencyInfo.network!,
+                  request!.currencyInfo.value,
+                )}
               </td>
               <td>
                 {formatUnits(
                   BigInt(request?.expectedAmount as number),
-                  currencies.get(
-                    request!.currencyInfo.network!.concat(
-                      "_",
-                      request!.currencyInfo.value,
-                    ),
-                  )?.decimals || 18,
+                  getDecimals(
+                    request!.currencyInfo.network!,
+                    request!.currencyInfo.value,
+                  ) || 18,
                 )}
               </td>
               <td>{request?.contentData.reason}</td>
@@ -97,7 +91,15 @@ export default function Home() {
                   BigInt(request?.balance?.balance || 0),
                 )}
               </td>
-              <td>{formatUnits(BigInt(request?.balance?.balance || 0), 18)}</td>
+              <td>
+                {formatUnits(
+                  BigInt(request?.balance?.balance || 0),
+                  getDecimals(
+                    request!.currencyInfo.network!,
+                    request!.currencyInfo.value,
+                  ) || 18,
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -131,4 +133,12 @@ const calculateStatus = (
   } else if (state === Types.RequestLogic.STATE.PENDING) {
     return "Pending";
   }
+};
+
+const getSymbol = (network: string, value: string) => {
+  return currencies.get(network.concat("_", value))?.symbol;
+};
+
+const getDecimals = (network: string, value: string) => {
+  return currencies.get(network.concat("_", value))?.decimals;
 };
