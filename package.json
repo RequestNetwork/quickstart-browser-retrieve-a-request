@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@requestnetwork/request-client.js": "0.43.0",
+    "@requestnetwork/request-client.js": "0.47.1-next.2043",
     "@types/node": "20.10.4",
     "@types/react": "18.2.45",
     "@types/react-dom": "18.2.17",
